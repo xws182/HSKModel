@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D23D69EE1E0CDDA000F70AFE /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = D23D69ED1E0CDDA000F70AFE /* Person.m */; };
-		D2ED733F1E1E1625007E5248 /* NSObject+YYModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D2ED733B1E1E1625007E5248 /* NSObject+YYModel.m */; };
-		D2ED73401E1E1625007E5248 /* YYClassInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = D2ED733D1E1E1625007E5248 /* YYClassInfo.m */; };
 		D2F1D1801E09107300FE1432 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D2F1D17F1E09107300FE1432 /* main.m */; };
 		D2F1D1831E09107400FE1432 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D2F1D1821E09107400FE1432 /* AppDelegate.m */; };
 		D2F1D1861E09107400FE1432 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2F1D1851E09107400FE1432 /* ViewController.m */; };
@@ -30,11 +28,6 @@
 /* Begin PBXFileReference section */
 		D23D69EC1E0CDDA000F70AFE /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		D23D69ED1E0CDDA000F70AFE /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
-		D2ED733A1E1E1625007E5248 /* NSObject+YYModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+YYModel.h"; sourceTree = "<group>"; };
-		D2ED733B1E1E1625007E5248 /* NSObject+YYModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+YYModel.m"; sourceTree = "<group>"; };
-		D2ED733C1E1E1625007E5248 /* YYClassInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYClassInfo.h; sourceTree = "<group>"; };
-		D2ED733D1E1E1625007E5248 /* YYClassInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYClassInfo.m; sourceTree = "<group>"; };
-		D2ED733E1E1E1625007E5248 /* YYModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYModel.h; sourceTree = "<group>"; };
 		D2F1D17B1E09107300FE1432 /* HSKModel-master.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HSKModel-master.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F1D17F1E09107300FE1432 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D2F1D1811E09107300FE1432 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -75,18 +68,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D2ED73391E1E1625007E5248 /* YYModel */ = {
-			isa = PBXGroup;
-			children = (
-				D2ED733A1E1E1625007E5248 /* NSObject+YYModel.h */,
-				D2ED733B1E1E1625007E5248 /* NSObject+YYModel.m */,
-				D2ED733C1E1E1625007E5248 /* YYClassInfo.h */,
-				D2ED733D1E1E1625007E5248 /* YYClassInfo.m */,
-				D2ED733E1E1E1625007E5248 /* YYModel.h */,
-			);
-			path = YYModel;
-			sourceTree = "<group>";
-		};
 		D2F1D1721E09107200FE1432 = {
 			isa = PBXGroup;
 			children = (
@@ -106,7 +87,6 @@
 		D2F1D17D1E09107300FE1432 /* HSKModel-master */ = {
 			isa = PBXGroup;
 			children = (
-				D2ED73391E1E1625007E5248 /* YYModel */,
 				D2F1D1951E09116E00FE1432 /* HSKModel */,
 				D2F1D1811E09107300FE1432 /* AppDelegate.h */,
 				D2F1D1821E09107400FE1432 /* AppDelegate.m */,
@@ -227,13 +207,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D2ED733F1E1E1625007E5248 /* NSObject+YYModel.m in Sources */,
 				D2F1D1A31E0915CD00FE1432 /* ViewController2.m in Sources */,
 				D2F1D1861E09107400FE1432 /* ViewController.m in Sources */,
 				D2F1D1AF1E0918EF00FE1432 /* BaseModel.m in Sources */,
 				D2F1D19B1E09116E00FE1432 /* NSObject+HSKModel.m in Sources */,
 				D2F1D1A01E0915C500FE1432 /* ViewController1.m in Sources */,
-				D2ED73401E1E1625007E5248 /* YYClassInfo.m in Sources */,
 				D2F1D19A1E09116E00FE1432 /* HSKClass.m in Sources */,
 				D23D69EE1E0CDDA000F70AFE /* Person.m in Sources */,
 				D2F1D1831E09107400FE1432 /* AppDelegate.m in Sources */,

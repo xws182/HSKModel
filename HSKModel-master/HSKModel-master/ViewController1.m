@@ -10,8 +10,6 @@
 #import "Person.h"
 #import "BaseModel.h"
 #import "NSObject+HSKModel.h"
-#import "NSObject+YYModel.h"
-
 
 @interface ViewController1 ()
 @property (nonatomic) BaseModel *model;

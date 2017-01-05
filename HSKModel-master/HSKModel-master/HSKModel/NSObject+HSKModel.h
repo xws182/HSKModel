@@ -11,7 +11,8 @@
 @protocol HSKModel <NSObject>
 @optional
 + (NSDictionary<NSString *, Class> *)hsk_modelClassInArray;
-+ (NSDictionary<NSString *, NSString *> *)hsk_replacedKeyFromPropertyName;
++ (NSDictionary<NSString *, NSString *> *)hsk_loadModelCustomPropertyMapper;
++ (NSDictionary<NSString *, NSString *> *)hsk_exportModelCustomPropertyMapper;
 + (void)hsk_objectToModelDidFinish;
 @end
 

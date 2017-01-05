@@ -66,13 +66,20 @@
             _modelClassInArray = [cls hsk_modelClassInArray];
         }
         
-        if([cls respondsToSelector:@selector(hsk_replacedKeyFromPropertyName)]){
-            _replacedKeyFromPropertyName = [cls hsk_replacedKeyFromPropertyName];
+        if([cls respondsToSelector:@selector(hsk_loadModelCustomPropertyMapper)]){
+            _loadModelCustomPropertyMapper = [cls hsk_loadModelCustomPropertyMapper];
         }
     
-        NSMutableArray *propertys = [NSMutableArray array];
+        if([cls respondsToSelector:@selector(hsk_exportModelCustomPropertyMapper)]){
+            _exportModelCustomPropertyMapper = [cls hsk_exportModelCustomPropertyMapper];
+        }
+        
+        NSMutableDictionary *propertys = [NSMutableDictionary dictionary];
         while (cls != [NSObject class]) {
-            [propertys addObjectsFromArray:[self propertysForClass:cls]];
+            NSDictionary *dict = [self propertysForClass:cls];
+            for(NSString *key in dict){
+                [propertys setObject:dict[key] forKey:key];
+            }
             cls = class_getSuperclass(cls);
         }
         _propertys = propertys.copy;
@@ -102,14 +109,14 @@
     return hsk;
 }
 
-- (NSArray *)propertysForClass:(Class)cls{
-    NSMutableArray *propertys = [NSMutableArray array];
+- (NSDictionary *)propertysForClass:(Class)cls{
+    NSMutableDictionary *propertys = [NSMutableDictionary dictionary];
     unsigned int propertyCount = 0;
     objc_property_t * propertyList = class_copyPropertyList(cls, &propertyCount);
     for (int i = 0 ; i < propertyCount; i++) {
-        objc_property_t property = propertyList[i];
-        HSKProperty *p = [[HSKProperty alloc]initWithProperty:property];
-        if(p) [propertys addObject:p];
+        objc_property_t objc_property = propertyList[i];
+        HSKProperty *property = [[HSKProperty alloc]initWithProperty:objc_property];
+        if(property) propertys[property.propertyName] = property;
     }
     free(propertyList);
     return propertys;

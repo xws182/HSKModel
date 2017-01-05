@@ -130,100 +130,103 @@
 
 - (NSMutableDictionary *)getDictionaryForModelClass:(HSKClass *)modelClass{
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    NSArray *replacedKeyFromPropertyName = modelClass.replacedKeyFromPropertyName.allKeys;
-    for (HSKProperty *p in modelClass.propertys) {
-        NSString *key = p.propertyName;
-        if([replacedKeyFromPropertyName containsObject:p.propertyName]){
-            key = modelClass.replacedKeyFromPropertyName[p.propertyName];
+    NSArray *replacedValues = modelClass.exportModelCustomPropertyMapper.allKeys;
+    for (NSString *key in modelClass.propertys) {
+        NSString *replacedKey = key;
+        HSKProperty *property = modelClass.propertys[key];
+        if([replacedValues containsObject:key]){
+            replacedKey = modelClass.exportModelCustomPropertyMapper[key];
         }
-        switch (p.dataType) {
-            case HSKDataTypeBool:{
-                NSNumber *num = @(((bool (*)(id, SEL))(void *) objc_msgSend)(self, p.getter));
-                if(num) dictionary[key] = num;
+        if(property.propertyClass){
+            switch (property.dataType) {
+                case HSKDataTypeBool:{
+                    NSNumber *num = @(((bool (*)(id, SEL))(void *) objc_msgSend)(self, property.getter));
+                    if(num) dictionary[replacedKey] = num;
+                }
+                    break;
+                case HSKDataTypeFloat:{
+                    NSNumber *num = @(((float (*)(id, SEL))(void *) objc_msgSend)(self, property.getter));
+                    if(num) dictionary[replacedKey] = num;
+                }
+                    break;
+                case HSKDataTypeDouble:{
+                    NSNumber *num = @(((double (*)(id, SEL))(void *) objc_msgSend)(self, property.getter));
+                    if(num) dictionary[replacedKey] = num;
+                }
+                    break;
+                case HSKDataTypeChar:{
+                    NSNumber *num = @(((char (*)(id, SEL))(void *) objc_msgSend)(self, property.getter));
+                    if(num) dictionary[replacedKey] = num;
+                }
+                    break;
+                case HSKDataTypeShort:{
+                    NSNumber *num = @(((short (*)(id, SEL))(void *) objc_msgSend)(self, property.getter));
+                    if(num) dictionary[replacedKey] = num;
+                }
+                    break;
+                case HSKDataTypeInt:{
+                    NSNumber *num = @(((int (*)(id, SEL))(void *) objc_msgSend)(self, property.getter));
+                    if(num) dictionary[replacedKey] = num;
+                }
+                    break;
+                case HSKDataTypeLongLong:{
+                    NSNumber *num = @(((long long (*)(id, SEL))(void *) objc_msgSend)(self, property.getter));
+                    if(num) dictionary[replacedKey] = num;
+                }
+                    break;
+                case HSKDataTypeUnsignedChar:{
+                    NSNumber *num = @(((unsigned char (*)(id, SEL))(void *) objc_msgSend)(self, property.getter));
+                    if(num) dictionary[replacedKey] = num;
+                }
+                    break;
+                case HSKDataTypeUnsignedShort:{
+                    NSNumber *num = @(((unsigned short (*)(id, SEL))(void *) objc_msgSend)(self, property.getter));
+                    if(num) dictionary[replacedKey] = num;
+                }
+                    break;
+                case HSKDataTypeUnsignedInt:{
+                    NSNumber *num = @(((unsigned int (*)(id, SEL))(void *) objc_msgSend)(self, property.getter));
+                    if(num) dictionary[replacedKey] = num;
+                }
+                    break;
+                case HSKDataTypeUnsignedLongLong:{
+                    NSNumber *num = @(((unsigned long long (*)(id, SEL))(void *) objc_msgSend)(self, property.getter));
+                    if(num) dictionary[replacedKey] = num;
+                }
+                    break;
+                case HSKDataTypeNSNumber:{
+                    NSNumber *num = ((NSNumber * (*)(id, SEL))(void *) objc_msgSend)(self, property.getter);
+                    if(num) dictionary[replacedKey] = num;
+                }
+                    break;
+                case HSKDataTypeNSString:
+                case HSKDataTypeNSMutableString:{
+                    NSString *str = ((NSString * (*)(id, SEL))(void *) objc_msgSend)(self, property.getter);
+                    if(str.length) dictionary[replacedKey] = str;
+                }
+                    break;
+                case HSKDataTypeNSDictionary:
+                case HSKDataTypeNSMutableDictionary:{
+                    NSDictionary *dict = ((NSDictionary * (*)(id, SEL))(void *) objc_msgSend)(self, property.getter);
+                    NSDictionary *mDict = [self dictionaryForDictionaryInModels:dict];
+                    if(mDict.count) dictionary[replacedKey] = mDict;
+                }
+                    break;
+                case HSKDataTypeNSArray:
+                case HSKDataTypeNSMutableArray:{
+                    NSArray *array = ((NSArray * (*)(id, SEL))(void *) objc_msgSend)(self, property.getter);
+                    NSArray *mArray = [self arrayForArrayInModels:array];
+                    if(mArray.count) dictionary[replacedKey] = mArray;
+                }
+                    break;
+                case HSKDataTypeCustomObject:{
+                    NSObject *object = ((NSObject * (*)(id, SEL))(void *) objc_msgSend)(self, property.getter);
+                    NSDictionary *dict = [object hsk_modelToDictionary];
+                    if(dict.count) dictionary[replacedKey] = dict;
+                }
+                    break;
+                default:break;
             }
-                break;
-            case HSKDataTypeFloat:{
-                NSNumber *num = @(((float (*)(id, SEL))(void *) objc_msgSend)(self, p.getter));
-                if(num) dictionary[key] = num;
-            }
-                break;
-            case HSKDataTypeDouble:{
-                NSNumber *num = @(((double (*)(id, SEL))(void *) objc_msgSend)(self, p.getter));
-                if(num) dictionary[key] = num;
-            }
-                break;
-            case HSKDataTypeChar:{
-                NSNumber *num = @(((char (*)(id, SEL))(void *) objc_msgSend)(self, p.getter));
-                if(num) dictionary[key] = num;
-            }
-                break;
-            case HSKDataTypeShort:{
-                NSNumber *num = @(((short (*)(id, SEL))(void *) objc_msgSend)(self, p.getter));
-                if(num) dictionary[key] = num;
-            }
-                break;
-            case HSKDataTypeInt:{
-                NSNumber *num = @(((int (*)(id, SEL))(void *) objc_msgSend)(self, p.getter));
-                if(num) dictionary[key] = num;
-            }
-                break;
-            case HSKDataTypeLongLong:{
-                NSNumber *num = @(((long long (*)(id, SEL))(void *) objc_msgSend)(self, p.getter));
-                if(num) dictionary[key] = num;
-            }
-                break;
-            case HSKDataTypeUnsignedChar:{
-                NSNumber *num = @(((unsigned char (*)(id, SEL))(void *) objc_msgSend)(self, p.getter));
-                if(num) dictionary[key] = num;
-            }
-                break;
-            case HSKDataTypeUnsignedShort:{
-                NSNumber *num = @(((unsigned short (*)(id, SEL))(void *) objc_msgSend)(self, p.getter));
-                if(num) dictionary[key] = num;
-            }
-                break;
-            case HSKDataTypeUnsignedInt:{
-                NSNumber *num = @(((unsigned int (*)(id, SEL))(void *) objc_msgSend)(self, p.getter));
-                if(num) dictionary[key] = num;
-            }
-                break;
-            case HSKDataTypeUnsignedLongLong:{
-                NSNumber *num = @(((unsigned long long (*)(id, SEL))(void *) objc_msgSend)(self, p.getter));
-                if(num) dictionary[key] = num;
-            }
-                break;
-            case HSKDataTypeNSNumber:{
-                NSNumber *num = ((NSNumber * (*)(id, SEL))(void *) objc_msgSend)(self, p.getter);
-                if(num) dictionary[key] = num;
-            }
-                break;
-            case HSKDataTypeNSString:
-            case HSKDataTypeNSMutableString:{
-                NSString *str = ((NSString * (*)(id, SEL))(void *) objc_msgSend)(self, p.getter);
-                if(str.length) dictionary[key] = str;
-            }
-                break;
-            case HSKDataTypeNSDictionary:
-            case HSKDataTypeNSMutableDictionary:{
-                NSDictionary *dict = ((NSDictionary * (*)(id, SEL))(void *) objc_msgSend)(self, p.getter);
-                NSDictionary *mDict = [self dictionaryForDictionaryInModels:dict];
-                if(mDict.count) dictionary[key] = mDict;
-            }
-                break;
-            case HSKDataTypeNSArray:
-            case HSKDataTypeNSMutableArray:{
-                NSArray *array = ((NSArray * (*)(id, SEL))(void *) objc_msgSend)(self, p.getter);
-                NSArray *mArray = [self arrayForArrayInModels:array];
-                if(mArray.count) dictionary[key] = mArray;
-            }
-                break;
-            case HSKDataTypeCustomObject:{
-                NSObject *object = ((NSObject * (*)(id, SEL))(void *) objc_msgSend)(self, p.getter);
-                NSDictionary *dict = [object hsk_modelToDictionary];
-                if(dict.count) dictionary[key] = dict;
-            }
-                break;
-            default:break;
         }
     }
     return dictionary;
@@ -231,91 +234,92 @@
 
 + (NSObject *)setModelClass:(HSKClass *)modelClass dictionary:(NSDictionary *)dictionary{
     NSObject *objc = [modelClass.cls new];
-    NSArray *replacedKeyFromPropertyName = modelClass.replacedKeyFromPropertyName.allKeys;
-    for (HSKProperty *p in modelClass.propertys) {
-        id value = nil;
-        if([replacedKeyFromPropertyName containsObject:p.propertyName]){
-            NSString *key = modelClass.replacedKeyFromPropertyName[p.propertyName];
-            value = dictionary[key];
-        }else{
-            value = dictionary[p.propertyName];
+    NSArray *replacedKeys = modelClass.loadModelCustomPropertyMapper.allKeys;
+    for (NSString *key in dictionary) {
+        NSString *propertyKey = key;
+        if([replacedKeys containsObject:propertyKey]){
+            propertyKey = modelClass.loadModelCustomPropertyMapper[propertyKey];
         }
-        switch (p.dataType) {
-            case HSKDataTypeBool:
-                ((void (*)(id, SEL, bool))(void *) objc_msgSend)((id)objc, p.setter, [value isKindOfClass:[NSNumber class]] ? [value boolValue] : 0);
-                break;
-            case HSKDataTypeFloat:
-                ((void (*)(id, SEL, float))(void *) objc_msgSend)((id)objc, p.setter, [value isKindOfClass:[NSNumber class]] ? [value floatValue] : 0);
-                break;
-            case HSKDataTypeDouble:
-                ((void (*)(id, SEL, double))(void *) objc_msgSend)((id)objc, p.setter, [value isKindOfClass:[NSNumber class]] ? [value doubleValue] : 0);
-                break;
-            case HSKDataTypeChar:
-                ((void (*)(id, SEL, int8_t))(void *) objc_msgSend)((id)objc, p.setter, [value isKindOfClass:[NSNumber class]] ? [value charValue] : 0);
-                break;
-            case HSKDataTypeShort:
-                ((void (*)(id, SEL, int16_t))(void *) objc_msgSend)((id)objc, p.setter, [value isKindOfClass:[NSNumber class]] ? [value shortValue] : 0);
-                break;
-            case HSKDataTypeInt:
-                ((void (*)(id, SEL, int32_t))(void *) objc_msgSend)((id)objc, p.setter, [value isKindOfClass:[NSNumber class]] ? [value intValue] : 0);
-                break;
-            case HSKDataTypeLongLong:
-                ((void (*)(id, SEL, int64_t))(void *) objc_msgSend)((id)objc, p.setter, [value isKindOfClass:[NSNumber class]] ? [value longLongValue] : 0);
-                break;
-            case HSKDataTypeUnsignedChar:
-                ((void (*)(id, SEL, uint8_t))(void *) objc_msgSend)((id)objc, p.setter, [value isKindOfClass:[NSNumber class]] ? [value unsignedCharValue] : 0);
-                break;
-            case HSKDataTypeUnsignedShort:
-                ((void (*)(id, SEL, uint16_t))(void *) objc_msgSend)((id)objc, p.setter, [value isKindOfClass:[NSNumber class]] ? [value unsignedShortValue] : 0);
-                break;
-            case HSKDataTypeUnsignedInt:
-                ((void (*)(id, SEL, uint32_t))(void *) objc_msgSend)((id)objc, p.setter, [value isKindOfClass:[NSNumber class]] ? [value unsignedIntValue] : 0);
-                break;
-            case HSKDataTypeUnsignedLongLong:
-                ((void (*)(id, SEL, uint64_t))(void *) objc_msgSend)((id)objc, p.setter, [value isKindOfClass:[NSNumber class]] ? [value unsignedLongLongValue] : 0);
-                break;
-            case HSKDataTypeNSNumber:
-                ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, p.setter, [value isKindOfClass:[NSNumber class]] ? value : nil);
-                break;
-            case HSKDataTypeCustomObject:
-                ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, p.setter, [p.propertyClass hsk_modelWithObject:value]);
-                break;
-            case HSKDataTypeNSString:
-            case HSKDataTypeNSMutableString:{
-                if([value isKindOfClass:[NSString class]]){
-                    NSString *str = (NSString *)value;
-                    ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, p.setter, p.dataType == HSKDataTypeNSMutableString ? str.mutableCopy : str);
-                }else if ([value isKindOfClass:[NSNumber class]]){
-                    NSString *str = [NSString stringWithFormat:@"%@",value];
-                    ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, p.setter, p.dataType == HSKDataTypeNSMutableString ? str.mutableCopy : str);
+        HSKProperty *property = modelClass.propertys[propertyKey];
+        id value = dictionary[key];
+        if(property.propertyClass){
+            switch (property.dataType) {
+                case HSKDataTypeBool:
+                    ((void (*)(id, SEL, bool))(void *) objc_msgSend)((id)objc, property.setter, [value isKindOfClass:[NSNumber class]] ? [value boolValue] : 0);
+                    break;
+                case HSKDataTypeFloat:
+                    ((void (*)(id, SEL, float))(void *) objc_msgSend)((id)objc, property.setter, [value isKindOfClass:[NSNumber class]] ? [value floatValue] : 0);
+                    break;
+                case HSKDataTypeDouble:
+                    ((void (*)(id, SEL, double))(void *) objc_msgSend)((id)objc, property.setter, [value isKindOfClass:[NSNumber class]] ? [value doubleValue] : 0);
+                    break;
+                case HSKDataTypeChar:
+                    ((void (*)(id, SEL, int8_t))(void *) objc_msgSend)((id)objc, property.setter, [value isKindOfClass:[NSNumber class]] ? [value charValue] : 0);
+                    break;
+                case HSKDataTypeShort:
+                    ((void (*)(id, SEL, int16_t))(void *) objc_msgSend)((id)objc, property.setter, [value isKindOfClass:[NSNumber class]] ? [value shortValue] : 0);
+                    break;
+                case HSKDataTypeInt:
+                    ((void (*)(id, SEL, int32_t))(void *) objc_msgSend)((id)objc, property.setter, [value isKindOfClass:[NSNumber class]] ? [value intValue] : 0);
+                    break;
+                case HSKDataTypeLongLong:
+                    ((void (*)(id, SEL, int64_t))(void *) objc_msgSend)((id)objc, property.setter, [value isKindOfClass:[NSNumber class]] ? [value longLongValue] : 0);
+                    break;
+                case HSKDataTypeUnsignedChar:
+                    ((void (*)(id, SEL, uint8_t))(void *) objc_msgSend)((id)objc, property.setter, [value isKindOfClass:[NSNumber class]] ? [value unsignedCharValue] : 0);
+                    break;
+                case HSKDataTypeUnsignedShort:
+                    ((void (*)(id, SEL, uint16_t))(void *) objc_msgSend)((id)objc, property.setter, [value isKindOfClass:[NSNumber class]] ? [value unsignedShortValue] : 0);
+                    break;
+                case HSKDataTypeUnsignedInt:
+                    ((void (*)(id, SEL, uint32_t))(void *) objc_msgSend)((id)objc, property.setter, [value isKindOfClass:[NSNumber class]] ? [value unsignedIntValue] : 0);
+                    break;
+                case HSKDataTypeUnsignedLongLong:
+                    ((void (*)(id, SEL, uint64_t))(void *) objc_msgSend)((id)objc, property.setter, [value isKindOfClass:[NSNumber class]] ? [value unsignedLongLongValue] : 0);
+                    break;
+                case HSKDataTypeNSNumber:
+                    ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, property.setter, [value isKindOfClass:[NSNumber class]] ? value : nil);
+                    break;
+                case HSKDataTypeCustomObject:
+                    ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, property.setter, [property.propertyClass hsk_modelWithObject:value]);
+                    break;
+                case HSKDataTypeNSString:
+                case HSKDataTypeNSMutableString:{
+                    if([value isKindOfClass:[NSString class]]){
+                        NSString *str = (NSString *)value;
+                        ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, property.setter, property.dataType == HSKDataTypeNSMutableString ? str.mutableCopy : str);
+                    }else if ([value isKindOfClass:[NSNumber class]]){
+                        NSString *str = [NSString stringWithFormat:@"%@",value];
+                        ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, property.setter, property.dataType == HSKDataTypeNSMutableString ? str.mutableCopy : str);
+                    }
                 }
-            }
-                break;
-            case HSKDataTypeNSDictionary:
-            case HSKDataTypeNSMutableDictionary:
-                if([value isKindOfClass:[NSDictionary class]]){
-                    NSDictionary *dictionary = (NSDictionary *)value;
-                    ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, p.setter, p.dataType == HSKDataTypeNSMutableDictionary ? dictionary.mutableCopy : dictionary);
-                }
-                break;
-            case HSKDataTypeNSArray:
-            case HSKDataTypeNSMutableArray:
-                if([value isKindOfClass:[NSArray class]]){
-                    if([modelClass.modelClassInArray.allKeys containsObject:p.propertyName] && modelClass.modelClassInArray[p.propertyName]){
-                        Class cls = modelClass.modelClassInArray[p.propertyName];
-                        NSMutableArray *models = [NSMutableArray array];
-                        for(id obj in (NSArray *)value){
-                            NSObject *model = [cls hsk_modelWithObject:obj];
-                            if(model) [models addObject:model];
+                    break;
+                case HSKDataTypeNSDictionary:
+                case HSKDataTypeNSMutableDictionary:
+                    if([value isKindOfClass:[NSDictionary class]]){
+                        NSDictionary *dictionary = (NSDictionary *)value;
+                        ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, property.setter, property.dataType == HSKDataTypeNSMutableDictionary ? dictionary.mutableCopy : dictionary);
+                    }
+                    break;
+                case HSKDataTypeNSArray:
+                case HSKDataTypeNSMutableArray:
+                    if([value isKindOfClass:[NSArray class]]){
+                        if([modelClass.modelClassInArray.allKeys containsObject:property.propertyName] && modelClass.modelClassInArray[property.propertyName]){
+                            Class cls = modelClass.modelClassInArray[property.propertyName];
+                            NSMutableArray *models = [NSMutableArray array];
+                            for(id obj in (NSArray *)value){
+                                NSObject *model = [cls hsk_modelWithObject:obj];
+                                if(model) [models addObject:model];
+                            }
+                            ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, property.setter, property.dataType == HSKDataTypeNSMutableArray ? models : models.copy);
                         }
-                        ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, p.setter, p.dataType == HSKDataTypeNSMutableArray ? models : models.copy);
+                        else{
+                            ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, property.setter, nil);
+                        }
                     }
-                    else{
-                        ((void (*)(id, SEL, id))(void *) objc_msgSend)((id)objc, p.setter, nil);
-                    }
-                }
-                break;
-            default:break;
+                    break;
+                default:break;
+            }
         }
     }
     if([modelClass.cls respondsToSelector:@selector(hsk_objectToModelDidFinish)]){

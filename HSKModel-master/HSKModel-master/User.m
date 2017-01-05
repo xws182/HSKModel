@@ -18,7 +18,6 @@
 
 + (NSDictionary *)hsk_replacedKeyFromPropertyName{
     return @{
-             
              @"ID" : @"id",
              @"desc" : @"desciption",
              @"name" : @"newName"

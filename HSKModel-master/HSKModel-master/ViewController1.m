@@ -10,6 +10,8 @@
 #import "Person.h"
 #import "BaseModel.h"
 #import "NSObject+HSKModel.h"
+#import "NSObject+YYModel.h"
+
 
 @interface ViewController1 ()
 @property (nonatomic) BaseModel *model;
@@ -38,14 +40,21 @@
     
 
     
+
     BaseModel *model = [BaseModel hsk_modelWithObject:json];
-    NSLog(@"%@",model.ID);
-    NSLog(@"%@",model.desc);
-    NSLog(@"%@",model.name);
-    NSLog(@"%@",model.hsk);
-    NSLog(@"%@",model.person.name);
-    NSLog(@"%@",model.person.age);
-    NSLog(@"%@",model.person.sex);
+ 
+    NSDictionary *dict = [model hsk_modelToDictionary];
+
+    NSLog(@"model = %@",model.ID);
+    NSLog(@"model = %@",model.desc);
+    NSLog(@"model = %@",model.name);
+    NSLog(@"model = %@",model.hsk);
+    
+    NSLog(@"model = %@",model.person.name);
+    NSLog(@"model = %@",model.person.age);
+    NSLog(@"model = %@",model.person.sex);
+    
+    NSLog(@"dict = %@",dict);
 
 }
 

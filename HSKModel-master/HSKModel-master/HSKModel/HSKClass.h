@@ -32,7 +32,6 @@ typedef NS_ENUM (NSUInteger, HSKDataType) {
 };
 
 @interface HSKProperty : NSObject
-
 - (instancetype)initWithProperty:(objc_property_t)property;
 @property (nonatomic, assign, readonly) objc_property_t property;
 @property (nonatomic, assign, readonly) HSKDataType dataType;
@@ -43,11 +42,10 @@ typedef NS_ENUM (NSUInteger, HSKDataType) {
 @end
 
 @interface HSKClass : NSObject
-
 + (instancetype)classInfoWithClass:(Class)cls;
 @property (nonatomic, assign, readonly) Class cls;
-@property (nonatomic, strong, readonly) NSArray<HSKProperty *> *propertys;
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, HSKProperty *> *propertys;
 @property (nonatomic, strong, readonly) NSDictionary<NSString *, Class> *modelClassInArray;
-@property (nonatomic, strong, readonly) NSDictionary<NSString *, NSString *> *replacedKeyFromPropertyName;
-
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, NSString *> *loadModelCustomPropertyMapper;
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, NSString *> *exportModelCustomPropertyMapper;
 @end

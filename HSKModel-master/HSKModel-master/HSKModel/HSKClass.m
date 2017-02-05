@@ -112,7 +112,7 @@
 - (NSDictionary *)propertysForClass:(Class)cls{
     NSMutableDictionary *propertys = [NSMutableDictionary dictionary];
     unsigned int propertyCount = 0;
-    objc_property_t * propertyList = class_copyPropertyList(cls, &propertyCount);
+    objc_property_t *propertyList = class_copyPropertyList(cls, &propertyCount);
     for (int i = 0 ; i < propertyCount; i++) {
         objc_property_t objc_property = propertyList[i];
         HSKProperty *property = [[HSKProperty alloc]initWithProperty:objc_property];

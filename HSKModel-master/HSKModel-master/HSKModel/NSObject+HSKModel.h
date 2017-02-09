@@ -24,6 +24,6 @@
 + (instancetype)hsk_modelWithResource:(NSString *)name ofType:(NSString *)ext;
 + (NSMutableArray *)hsk_modelArrayWithResource:(NSString *)name ofType:(NSString *)ext;
 
-- (NSMutableDictionary *)hsk_modelToDictionary;
+- (NSMutableDictionary *)hsk_modelTransformDictionary;
 
 @end

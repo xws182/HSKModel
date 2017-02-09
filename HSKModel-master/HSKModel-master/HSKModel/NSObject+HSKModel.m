@@ -40,7 +40,7 @@
     return [self hsk_modelArrayWithObject:dictionary];
 }
 
-- (NSMutableDictionary *)hsk_modelToDictionary{
+- (NSMutableDictionary *)hsk_modelTransformDictionary{
     HSKClass *cls = [HSKClass classInfoWithClass:self.class];
     return [self getDictionaryForModelClass:cls];
 }
@@ -54,7 +54,7 @@
 }
 
 + (NSArray *)arrayWithObject:(id)object{
-    if (!object) return nil;
+    if(!object) return nil;
     NSArray *array = nil;
     NSData *jsonData = nil;
     if ([object isKindOfClass:[NSArray class]]) {
@@ -101,7 +101,7 @@
             NSDictionary *dict = [self dictionaryInModels:obj];
             if(dict) [mArray addObject:dict];
         }else{
-            NSDictionary *dict = [obj hsk_modelToDictionary];
+            NSDictionary *dict = [obj hsk_modelTransformDictionary];
             if(dict) [mArray addObject:dict];
         }
     }
@@ -121,7 +121,7 @@
             NSDictionary *dict = [self dictionaryInModels:value];
             if(dict) mDictionary[obj] = dict;
         }else{
-            NSDictionary *dict = [value hsk_modelToDictionary];
+            NSDictionary *dict = [value hsk_modelTransformDictionary];
             if(dict) mDictionary[obj] = dict;
         }
     }
@@ -221,7 +221,7 @@
                     break;
                 case HSKDataTypeCustomObject:{
                     NSObject *object = ((NSObject * (*)(id, SEL))(void *) objc_msgSend)(self, property.getter);
-                    NSDictionary *dict = [object hsk_modelToDictionary];
+                    NSDictionary *dict = [object hsk_modelTransformDictionary];
                     if(dict.count) dictionary[replacedKey] = dict;
                 }
                     break;

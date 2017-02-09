@@ -41,7 +41,7 @@
 
     BaseModel *model = [BaseModel hsk_modelWithObject:json];
  
-    NSDictionary *dict = [model hsk_modelToDictionary];
+    NSDictionary *dict = [model hsk_modelTransformDictionary];
 
     NSLog(@"model = %@",model.ID);
     NSLog(@"model = %@",model.desc);

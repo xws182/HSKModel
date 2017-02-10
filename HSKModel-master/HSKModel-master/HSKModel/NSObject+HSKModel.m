@@ -322,8 +322,8 @@
             }
         }
     }
-    if([modelClass.cls respondsToSelector:@selector(hsk_objectToModelDidFinish)]){
-        [modelClass.cls hsk_objectToModelDidFinish];
+    if([modelClass.cls respondsToSelector:@selector(hsk_objectTransformModelDidFinish)]){
+        [modelClass.cls hsk_objectTransformModelDidFinish];
     }
     return objc;
 }

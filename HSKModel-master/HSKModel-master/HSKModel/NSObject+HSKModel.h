@@ -13,7 +13,7 @@
 + (NSDictionary<NSString *, Class> *)hsk_modelClassInArray;
 + (NSDictionary<NSString *, NSString *> *)hsk_loadModelCustomPropertyMapper;
 + (NSDictionary<NSString *, NSString *> *)hsk_exportModelCustomPropertyMapper;
-+ (void)hsk_objectToModelDidFinish;
++ (void)hsk_objectTransformModelDidFinish;
 @end
 
 @interface NSObject (HSKModel)

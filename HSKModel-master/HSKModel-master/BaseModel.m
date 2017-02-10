@@ -30,7 +30,7 @@
 }
 
 
-//+ (void)hsk_objectToModelDidFinish{
+//+ (void)hsk_objectTransformModelDidFinish{
 //
 //    NSLog(@"转换完毕");
 //}

@@ -10,11 +10,11 @@
 
 @implementation NSObject (HSKModel)
 
-+ (instancetype)hsk_modelWithObject:(id)object {
++ (instancetype)hsk_modelWithObject:(id)object{
     NSDictionary *dictionary = [self dictionaryWithObject:object];
     if(!dictionary) return nil;
     HSKClass *cls = [HSKClass classInfoWithClass:self];
-    return [self setModelClass:cls dictionary:dictionary];
+    return [self modelClass:cls dictionary:dictionary];
 }
 
 + (instancetype)hsk_modelWithResource:(NSString *)name ofType:(NSString *)ext{
@@ -40,9 +40,9 @@
     return [self hsk_modelArrayWithObject:dictionary];
 }
 
-- (NSMutableDictionary *)hsk_modelTransformDictionary{
+- (NSMutableDictionary *)hsk_keyValues{
     HSKClass *cls = [HSKClass classInfoWithClass:self.class];
-    return [self getDictionaryForModelClass:cls];
+    return [self dictionaryForModelClass:cls];
 }
 
 + (NSDictionary *)dictionaryWithResource:(NSString *)name ofType:(NSString *)ext{
@@ -89,46 +89,46 @@
     return dictionary;
 }
 
-- (NSArray *)arrayInModels:(NSArray *)models{
+- (NSArray *)arrayForModelArray:(NSArray *)array{
     NSMutableArray *mArray = [NSMutableArray array];
-    for(id obj in models){
+    for(id obj in array){
         if([obj isKindOfClass:[NSNumber class]] || [obj isKindOfClass:[NSString class]]) {
             [mArray addObject:obj];
         }else if ([obj isKindOfClass:[NSArray class]]) {
-            NSArray *array = [self arrayInModels:obj];
+            NSArray *array = [self arrayForModelArray:obj];
             if(array) [mArray addObject:array];
         }else if ([obj isKindOfClass:[NSDictionary class]]) {
-            NSDictionary *dict = [self dictionaryInModels:obj];
+            NSDictionary *dict = [self dictionaryForModelDictionary:obj];
             if(dict) [mArray addObject:dict];
         }else{
-            NSDictionary *dict = [obj hsk_modelTransformDictionary];
+            NSDictionary *dict = [obj hsk_keyValues];
             if(dict) [mArray addObject:dict];
         }
     }
     return mArray;
 }
 
-- (NSDictionary *)dictionaryInModels:(NSDictionary *)models{
+- (NSDictionary *)dictionaryForModelDictionary:(NSDictionary *)dictionary{
     NSMutableDictionary *mDictionary= [NSMutableDictionary dictionary];
-    for(id obj in models){
-        id value = models[obj];
+    for(id obj in dictionary){
+        id value = dictionary[obj];
         if([value isKindOfClass:[NSNumber class]] || [value isKindOfClass:[NSString class]]) {
             mDictionary[obj] = value;
         }else if ([value isKindOfClass:[NSArray class]]) {
-            NSArray *array = [self arrayInModels:value];
+            NSArray *array = [self arrayForModelArray:value];
             if(array) mDictionary[obj] = array;
         }else if ([value isKindOfClass:[NSDictionary class]]) {
-            NSDictionary *dict = [self dictionaryInModels:value];
+            NSDictionary *dict = [self dictionaryForModelDictionary:value];
             if(dict) mDictionary[obj] = dict;
         }else{
-            NSDictionary *dict = [value hsk_modelTransformDictionary];
+            NSDictionary *dict = [value hsk_keyValues];
             if(dict) mDictionary[obj] = dict;
         }
     }
     return mDictionary;
 }
 
-- (NSMutableDictionary *)getDictionaryForModelClass:(HSKClass *)modelClass{
+- (NSMutableDictionary *)dictionaryForModelClass:(HSKClass *)modelClass{
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     NSArray *replacedValues = modelClass.exportModelCustomPropertyMapper.allKeys;
     for (NSString *key in modelClass.propertys) {
@@ -208,20 +208,20 @@
                 case HSKDataTypeNSDictionary:
                 case HSKDataTypeNSMutableDictionary:{
                     NSDictionary *dict = ((NSDictionary * (*)(id, SEL))(void *) objc_msgSend)(self, property.getter);
-                    NSDictionary *mDict = [self dictionaryInModels:dict];
+                    NSDictionary *mDict = [self dictionaryForModelDictionary:dict];
                     if(mDict.count) dictionary[replacedKey] = mDict;
                 }
                     break;
                 case HSKDataTypeNSArray:
                 case HSKDataTypeNSMutableArray:{
                     NSArray *array = ((NSArray * (*)(id, SEL))(void *) objc_msgSend)(self, property.getter);
-                    NSArray *mArray = [self arrayInModels:array];
+                    NSArray *mArray = [self arrayForModelArray:array];
                     if(mArray.count) dictionary[replacedKey] = mArray;
                 }
                     break;
                 case HSKDataTypeCustomObject:{
                     NSObject *object = ((NSObject * (*)(id, SEL))(void *) objc_msgSend)(self, property.getter);
-                    NSDictionary *dict = [object hsk_modelTransformDictionary];
+                    NSDictionary *dict = [object hsk_keyValues];
                     if(dict.count) dictionary[replacedKey] = dict;
                 }
                     break;
@@ -232,7 +232,7 @@
     return dictionary;
 }
 
-+ (NSObject *)setModelClass:(HSKClass *)modelClass dictionary:(NSDictionary *)dictionary{
++ (NSObject *)modelClass:(HSKClass *)modelClass dictionary:(NSDictionary *)dictionary{
     NSObject *objc = [modelClass.cls new];
     NSArray *replacedKeys = modelClass.loadModelCustomPropertyMapper.allKeys;
     for (NSString *key in dictionary) {

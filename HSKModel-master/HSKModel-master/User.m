@@ -16,10 +16,18 @@
              };
 }
 
-+ (NSDictionary *)hsk_replacedKeyFromPropertyName{
++ (NSDictionary *)hsk_loadModelCustomPropertyMapper{
+    return @{
+             @"id" : @"ID",
+             @"desciption":  @"desc",
+             @"newName" : @"name"
+             };
+}
+
++ (NSDictionary *)hsk_exportModelCustomPropertyMapper{
     return @{
              @"ID" : @"id",
-             @"desc" : @"desciption",
+             @"desc":  @"desciption",
              @"name" : @"newName"
              };
 }

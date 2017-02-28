@@ -29,6 +29,7 @@
                            @"id":@"8888888",
                            @"newName":@"zhouqiao",
                            @"hsk":[NSNull null],
+                           @"result":@"YES",
                            @"person": @{
                                        @"name" : @"zhouqiao",
                                        @"age" : @"26",

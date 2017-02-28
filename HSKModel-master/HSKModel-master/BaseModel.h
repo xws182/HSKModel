@@ -10,6 +10,7 @@
 #import "Person.h"
 
 @interface BaseModel : NSObject
+@property (nonatomic ) BOOL result;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *age;
 @property (nonatomic, copy) NSString *ID;
@@ -17,4 +18,5 @@
 @property (nonatomic, copy) NSString *hsk;
 @property (nonatomic, copy) NSDictionary *dic;
 @property (nonatomic ) Person *person;
+
 @end

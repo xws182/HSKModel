@@ -134,6 +134,7 @@
     for (NSString *key in modelClass.propertys) {
         NSString *replacedKey = key;
         HSKProperty *property = modelClass.propertys[key];
+        if(!property) continue;
         if([replacedValues containsObject:key]){
             replacedKey = modelClass.exportModelCustomPropertyMapper[key];
         }

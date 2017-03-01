@@ -239,6 +239,7 @@
             propertyKey = modelClass.loadModelCustomPropertyMapper[propertyKey];
         }
         HSKProperty *property = modelClass.propertys[propertyKey];
+        if(!property) continue;
         id value = dictionary[key];
         switch (property.dataType) {
             case HSKDataTypeBool:
